@@ -207,10 +207,10 @@
       // placeholder button behavior (reactive)
       function setupTopButtons(){
         const mappings = [
-          {id:'btnHome', name:'Home'},
-          {id:'btnTutorial', name:'Tutorial'},
-          {id:'btnTools', name:'Tools'},
-          {id:'btnDownloads', name:'Downloads'}
+            {id:'btnHome', name:'Home'},
+            {id:'btnTutorial', name:'Tutorial'},
+            {id:'btnTools', name:'Tools'},
+            {id:'btnDownloads', name:'Downloads'}
         ];
         mappings.forEach(m=>{
           const el = document.getElementById(m.id);
@@ -228,6 +228,10 @@
               window.location.href = 'index.html';
               return;
             }
+              if(m.id === 'btnTutorial'){
+                window.location.href = 'tutorials.html';
+                return;
+              }
             // placeholder action for remaining buttons
             console.log(m.name + ' clicked');
             const p = document.createElement('div'); p.textContent = m.name + ' (placeholder)';

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Installing Unity Hub & VRC Creator Companion | MHW 2 VRC</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .tutorial-step { margin: 48px auto 32px auto; max-width: 640px; text-align: center; background: rgba(191,161,255,0.08); border-radius: 16px; padding: 32px 24px 24px 24px; box-shadow: 0 4px 24px rgba(191,161,255,0.08); }
+    .tutorial-step h2 { font-size: 1.6em; color: #735AFF; margin-bottom: 18px; }
+    .tutorial-step p { font-size: 1.15em; color: #232323; margin-bottom: 18px; }
+    .tutorial-step a { font-weight: bold; }
+    .tutorial-step img { width: 100%; max-width: 560px; border-radius: 12px; box-shadow: 0 2px 16px rgba(141,255,199,0.13); margin-bottom: 8px; }
+    .back-link { display: inline-block; margin-top: 32px; color: #735AFF; text-decoration: underline; font-size: 1.1em; }
+  </style>
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div id="blobsRoot" aria-hidden="true"></div>
+  <div class="content">
+    <h1>Installing Unity Hub & VRC Creator Companion</h1>
+    <div style="text-align:center;font-size:1.15em;color:#735AFF;font-weight:bold;margin-bottom:18px;">(20 step tutorial, video coming soon)</div>
+    <div class="tutorial-step">
+      <h2>Step 1</h2>
+      <p>Navigate to <a href="https://vrchat.com/home/download" target="_blank" style="color:#735AFF;text-decoration:underline;font-weight:bold;">https://vrchat.com/home/download</a> and download the VRChat Creator Companion. If you haven't already, you'll need to sign up for a VRChat account.</p>
+      <img src="TutorialPics/tutorial1pic1.png" alt="Download VRChat Creator Companion screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 2</h2>
+      <p>Next you will need to navigate to the Unity website <a href="https://unity.com/download" target="_blank" style="color:#735AFF;text-decoration:underline;font-weight:bold;">https://unity.com/download</a> and download the Unity Hub for your specified device. These tutorials are strictly following windows protocols currently.</p>
+      <img src="TutorialPics/tutorial1pic2.png" alt="Download Unity Hub screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 3</h2>
+      <p>Once both of these are downloaded and you have both a Unity and a VRChat account, you're going to want to run and set up both programs. Once both are installed, you want to open up the VRChat Creator Companion and navigate to "Projects." Here we can create a new or import an old project. For the purposes of this tutorial, we will be creating one.</p>
+      <img src="TutorialPics/tutorial1pic3.png" alt="VRChat Creator Companion Projects screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 4</h2>
+      <p>Here you can name your world whatever you'd like and select where you want your project location to be on your computer.</p>
+      <img src="TutorialPics/tutorial1pic4.png" alt="Project naming and location screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 5</h2>
+      <p>You'll notice the Create Project button is grayed out until you select "Unity 2022 World Project" from the top left.</p>
+      <img src="TutorialPics/tutorial1pic5.png" alt="Unity 2022 World Project selection screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 6</h2>
+      <p>The project will now be created while we navigate elsewhere to grab the older unity editor version we need.</p>
+      <img src="TutorialPics/tutorial1pic6.png" alt="Project creation screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 7</h2>
+      <p>Navigate to <a href="https://unity.com/releases/editor/archive" target="_blank" style="color:#735AFF;text-decoration:underline;font-weight:bold;">https://unity.com/releases/editor/archive</a> to grab most recent compatible version of the unity editor that you need for VRChat, version 2022.3.22f1. See step 8 for more details here.</p>
+      <img src="TutorialPics/tutorial1pic7.png" alt="Unity editor archive screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 8</h2>
+      <p>You need to select Unity 2022, and LTS, as opposed to Unity 6 and supported. See Step 9 to continue.</p>
+      <img src="TutorialPics/tutorial1pic8.png" alt="Unity 2022 LTS selection screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 9</h2>
+      <p>Scroll all the way down to 2022.3.22f1. You will absolutely notice the security alert warnings on all of these unity editor versions, and that's ok. VRChat creators can disregard the October 2025 Unity security warning in the Hub, as the recommended 2022.3.22f1 version remains safe and required for content creation. While a major Unity vulnerability affects standalone applications, VRChat is unaffected, and using newer, unapproved versions will prevent avatar/world uploading. Click install to the right of 2022.3.22f1</p>
+      <img src="TutorialPics/tutorial1pic9.png" alt="Unity editor install screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 10</h2>
+      <p>You do not neccessarily have to always allow it, but at least for this time, we will click Open Unity Hub.</p>
+      <img src="TutorialPics/tutorial1pic10.png" alt="Open Unity Hub screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 11</h2>
+      <p>Ensure you have the android build support options selected below. If you have used the desktop editor for MHW, chances are you already have VS Code. If you want to reinstall it keep this option checked as well. if not we will have to set VS Codes path later for Unity.</p>
+      <img src="TutorialPics/tutorial1pic11.png" alt="Android build support and VS Code screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 12</h2>
+      <p>You can monitor the progress of your editor installation from the downloads button in the top right area of the Unity Hub.</p>
+      <img src="TutorialPics/tutorial1pic12.png" alt="Unity Hub downloads progress screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 13</h2>
+      <p>When you see the green check mark next to each item in the downloads menu your installation is complete. Depending on your device specs this could take quite a while, and the editor will definitely take the longest.</p>
+      <img src="TutorialPics/tutorial1pic13.png" alt="Unity Hub downloads complete screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 14</h2>
+      <p>You can then confirm this installation in the Installs tab in the left sidebar menu. If you end up needing it for the VRChat creator companion or anything the Unity Editor path is there for you as well.</p>
+      <img src="TutorialPics/tutorial1pic14.png" alt="Unity Hub installs tab screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 15</h2>
+      <p>Navigate back to the VRChat Creator companion. Are you still with me? If you are, I'm proud you haven given up on yourself or your creations yet. Under the Project's Unity tab, you'll notice a unity version number which should already be 2022.3.22f1. If not, you can select it by clicking it if it is different. You can either click Open Project to open your VRChat world in unity or Open with 2022.3.22f1, but we are not going to do that yet. Click Manage Project or close the Change Unity Version Menu and then click Manage Project, then see step 16.</p>
+      <img src="TutorialPics/tutorial1pic15.png" alt="VRChat Creator Companion manage project screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 16</h2>
+      <p>We are here to make standalone quest worlds am I right? We want to slowly bring our communities from Meta Horizon VR to our new VRChat experiences, to maintain those bonds we've created and the creations we've built. Notice how EasyQuestSwitch and VRChatWorld Toolkit are not preinstalled. Let's install both as we will need them. AudioLink is optional, and as I do not think I'll be showing you it you can choose if you wish to install this for later projects or perhaps future tutorials.</p>
+      <img src="TutorialPics/tutorial1pic16.png" alt="Install EasyQuestSwitch and VRChatWorld Toolkit screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 17</h2>
+      <p>They will have red removal icons when they are installed into your project properly. Now we can finally hit Open Project in the top right corner.</p>
+      <img src="TutorialPics/tutorial1pic17.png" alt="Packages installed, ready to open project screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 18</h2>
+      <p>Give your project some time to open successfully and load the Unity Editor, as well as install necessary packages. If for whatever reason you see a project errors popup you can click ignore as the errors are due to you not having the VRChat PC application installed on your device. (Again assume with this tutorial I am demonstrating windows installation instructions.)</p>
+      <img src="TutorialPics/tutorial1pic18.png" alt="Unity Editor loading and errors screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 19</h2>
+      <p>Click convert if you added AudioLink, and clear the console in the bottom left under the Project tab.</p>
+      <img src="TutorialPics/tutorial1pic19.png" alt="Convert AudioLink and clear console screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 20</h2>
+      <p>And now you have Unity and the VRChat Creator companion installed and a blank VRChat world! Congrats!</p>
+      <img src="TutorialPics/tutorial1pic20.png" alt="Blank VRChat world screenshot">
+    </div>
+    <a class="back-link" href="tutorials.html">&#8592; Back to Tutorials</a>
+  </div>
+  <script>
+    // Matrix rain and blobs copied from index.html
+    // ...existing code...
+  </script>
+</body>
+</html>

@@ -6,11 +6,15 @@
   <title>MHW2VRC Downloads</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .downloads-root{ padding:6vh 6vw 10vh 6vw; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
-    .downloads-list{ width:100%; max-width:960px; margin-top:28px; display:flex; flex-direction:column; gap:12px; }
-    .download-item{ display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.02); border: 1px solid rgba(0,0,0,0.06); padding:12px 16px; border-radius:10px; }
-    .download-title{ font-size:18px; color:var(--text); }
-    .download-btn{ background:transparent; border:2px solid; padding:8px 12px; border-radius:8px; cursor:pointer; color:inherit; text-decoration:none; }
+    .downloads-root{ padding:6vh 6vw 10vh 6vw; min-height:100vh; display:flex; flex-direction:column; align-items:center; z-index:2; position:relative; }
+    .downloads-list{ width:100%; max-width:960px; margin-top:28px; display:flex; flex-direction:column; gap:12px; z-index:2; position:relative; }
+    .download-item{ display:flex; justify-content:space-between; align-items:center; border: 1px solid rgba(0,0,0,0.06); padding:12px 16px; border-radius:10px; }
+    .download-title{ font-size:18px; color:var(--text); border-radius:8px; padding:6px 12px; background: var(--dl-title-bg, #f3e8ff); transition: background 0.3s; }
+    .download-title.mint{ background: linear-gradient(90deg,#e9fff6 60%,#8DFFC7 100%); }
+    .download-title.pink{ background: linear-gradient(90deg,#ffeaf6 60%,#D86C9F 100%); }
+    .download-title.lilac{ background: linear-gradient(90deg,#f3e8ff 60%,#BFA1FF 100%); }
+    .download-title.sky{ background: linear-gradient(90deg,#e9f7ff 60%,#4FB7E6 100%); }
+    .download-btn{ background:#232323; border:2px solid; padding:8px 12px; border-radius:8px; cursor:pointer; color:inherit; text-decoration:none; transition: background 0.3s; }
     .download-btn.mint{ border-color: rgba(141,255,199,0.9); color:#8DDFBF; }
     .download-btn.pink{ border-color: rgba(216,108,159,0.9); color:#D86C9F; }
     .download-btn.lilac{ border-color: rgba(191,161,255,0.9); color:#BFA1FF; }
@@ -20,6 +24,8 @@
   </style>
 </head>
 <body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div id="blobsRoot" aria-hidden="true"></div>
   <div class="downloads-root">
     <h1 class="page-header">Downloads</h1>
     <div id="list" class="downloads-list">Loading…</div>
@@ -27,6 +33,160 @@
   </div>
 
   <script>
+    // Matrix rain and blobs copied from index.html
+    (function(){
+      const canvas = document.getElementById('matrix');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
+      const chars = '01';
+      const charArray = chars.split('');
+      const fontSize = 16;
+      let columns = Math.floor(canvas.width / fontSize);
+      let drops = Array(columns).fill(1);
+      const matrixColors = ['#8DFFC7','#96DEFF','#D2B4FF','#735AFF','#AF55FF','#FF50AA'];
+
+      function hexToRgba(hex, a){
+        const h = hex.replace('#','');
+        const bigint = parseInt(h,16);
+        const r = (bigint>>16)&255, g=(bigint>>8)&255, b=(bigint&255);
+        return `rgba(${r},${g},${b},${a})`;
+      }
+
+      function drawMatrix(){
+        const phase = (Date.now() % 10000) / 10000;
+        const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+        for(let i=0;i<matrixColors.length;i++){
+          const offset = (i/(matrixColors.length-1) + phase) % 1;
+          grad.addColorStop(offset, hexToRgba(matrixColors[i], 0.12));
+        }
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        ctx.font = fontSize + 'px monospace';
+        for(let i=0;i<drops.length;i++){
+          const text = charArray[Math.floor(Math.random()*charArray.length)];
+          ctx.fillStyle = matrixColors[Math.floor(Math.random()*matrixColors.length)];
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+          ctx.fillText(text, x, y);
+          if(y > canvas.height && Math.random()>0.975) drops[i]=0;
+          drops[i]++;
+        }
+      }
+      setInterval(drawMatrix, 45);
+      window.addEventListener('resize', ()=>{
+        const newCols = Math.floor(canvas.width / fontSize);
+        if(newCols !== columns){ columns = newCols; drops = Array(columns).fill(1); }
+      });
+    })();
+    (function(){
+      const ROOT = document.getElementById('blobsRoot');
+      const heading = document.querySelector('h1');
+      const COUNT = 1;
+      const blobs = [];
+      const rand = (a,b)=> a + Math.random()*(b-a);
+      function createBlob(sizeClass){
+        const el = document.createElement('div');
+        el.className = `morphing-container ${sizeClass} delay-0`;
+        el.innerHTML = '<div class="blob blob-layer-3"></div><div class="blob blob-layer-2"></div><div class="blob blob-layer-1"></div>';
+        ROOT.appendChild(el);
+        return el;
+      }
+      function headingCenter(){
+        const rect = heading.getBoundingClientRect();
+        return { x: rect.left + rect.width/2 + window.scrollX, y: rect.top + rect.height/2 + window.scrollY };
+      }
+      function getAnchorYOffset(){ return Math.min(window.innerHeight * 0.22, 180); }
+      for(let i=0;i<COUNT;i++){
+        const sizeClass = 'main-blob';
+        const el = createBlob(sizeClass);
+        let w = el.offsetWidth || (sizeClass==='main-blob'? 480 : sizeClass==='small'? 340:220);
+        let h = el.offsetHeight || w;
+        let radius = Math.max(w,h)/2 * 0.42;
+        let x,y;
+        const centerX = window.innerWidth/2;
+        const centerY = window.innerHeight/2;
+        const anchorOffset = getAnchorYOffset();
+        x = centerX;
+        y = centerY + anchorOffset;
+        const seed = Math.random()*10;
+        const vx = rand(-0.8,0.8);
+        const vy = rand(-0.8,0.8);
+        const mass = radius*radius;
+        const blob = { el, x, y, vx, vy, r: radius, mass, seed, sizeClass, anchor:(i===0) };
+        el.style.left = x + 'px'; el.style.top = y + 'px';
+        el.style.transform = 'translate(-50%,-50%) scale(1)';
+        blobs.push(blob);
+      }
+      let last = performance.now();
+      function resolveCollision(a,b){
+        const dx = b.x - a.x; const dy = b.y - a.y; let dist = Math.hypot(dx,dy);
+        if(dist === 0) { dist = 0.001; }
+        const padding = 12;
+        const minDist = a.r + b.r + padding;
+        if(dist < minDist){
+          const nx = dx/dist, ny = dy/dist;
+          const overlap = (minDist - dist);
+          const totalMass = a.mass + b.mass;
+          const sepFactor = 1.4;
+          a.x -= nx * overlap * sepFactor * (b.mass/totalMass);
+          a.y -= ny * overlap * sepFactor * (b.mass/totalMass);
+          b.x += nx * overlap * sepFactor * (a.mass/totalMass);
+          b.y += ny * overlap * sepFactor * (a.mass/totalMass);
+          const relVel = (b.vx - a.vx)*nx + (b.vy - a.vy)*ny;
+          if(relVel < 0){
+            const e = 0.35;
+            const j = -(1+e)*relVel / (1/a.mass + 1/b.mass);
+            a.vx -= (j * nx)/a.mass; a.vy -= (j * ny)/a.mass;
+            b.vx += (j * nx)/b.mass; b.vy += (j * ny)/b.mass;
+          }
+        }
+      }
+      function tick(now){
+        const dt = Math.min(0.032, (now-last)/1000); last = now;
+        const centerX = window.innerWidth/2;
+        const centerY = window.innerHeight/2;
+        const head = { x: centerX, y: centerY + getAnchorYOffset() };
+        for(let i=0;i<blobs.length;i++){
+          const b = blobs[i];
+          if(b.anchor){
+            const kx = (head.x - b.x) * 0.08;
+            const ky = (head.y - b.y) * 0.08;
+            b.vx += kx * dt; b.vy += ky * dt;
+          } else {
+            const wander = 0.06;
+            b.vx += (Math.sin(now*0.001 + b.seed) * wander) * dt;
+            b.vy += (Math.cos(now*0.001 + b.seed) * wander) * dt;
+          }
+          b.x += b.vx * 60 * dt; b.y += b.vy * 60 * dt;
+          const margin = 30;
+          const minX = margin, maxX = window.innerWidth - margin;
+          const minY = margin, maxY = window.innerHeight - margin;
+          if(b.x < minX){ b.x = minX; b.vx *= -0.7; }
+          if(b.x > maxX){ b.x = maxX; b.vx *= -0.7; }
+          if(b.y < minY){ b.y = minY; b.vy *= -0.7; }
+          if(b.y > maxY){ b.y = maxY; b.vy *= -0.7; }
+        }
+        for(let i=0;i<blobs.length;i++){
+          for(let j=i+1;j<blobs.length;j++) resolveCollision(blobs[i], blobs[j]);
+        }
+        for(const b of blobs){
+          b.vx *= 0.992; b.vy *= 0.992;
+          const amp = (b.sizeClass==='tiny')? 0.14 : (b.sizeClass==='small')? 0.1 : 0.06;
+          const s = 1 + amp * Math.sin((now*0.0025) + b.seed*3);
+          b.el.style.left = b.x + 'px'; b.el.style.top = b.y + 'px';
+          b.el.style.transform = `translate(-50%,-50%) scale(${s})`;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      window.addEventListener('resize', ()=>{
+        for(const b of blobs){ b.x = Math.min(window.innerWidth-40, Math.max(40, b.x)); b.y = Math.min(window.innerHeight-40, Math.max(40, b.y)); }
+      });
+    })();
     (function(){
       const owner = 'DemonatorRollerCoaster';
       const repo = 'MHW2VRC';
@@ -46,15 +206,16 @@
       }
 
       function renderFilesArray(names){
+        const listEl = document.getElementById('list');
         if(!names || !names.length){ listEl.textContent = 'No downloads found in the assetDownloads folder.'; return; }
         listEl.innerHTML = '';
         names.sort();
         names.forEach((name, idx)=>{
+          const colorClass = ['mint','pink','lilac','sky'][idx % 4] || 'mint';
           const row = document.createElement('div'); row.className = 'download-item';
-          const title = document.createElement('div'); title.className = 'download-title'; title.textContent = name.replace(/(\.zip|\.unitypackage)$/i,'');
+          const title = document.createElement('div'); title.className = 'download-title ' + colorClass; title.textContent = name.replace(/(\.zip|\.unitypackage)$/i,'');
           const btn = document.createElement('a');
-          btn.className = 'download-btn ' + (['mint','pink','lilac','sky'][idx % 4] || 'mint');
-          // local link to assetDownloads when hosted on gh-pages raw will be used in fallback
+          btn.className = 'download-btn ' + colorClass;
           btn.href = `assetDownloads/${encodeURIComponent(name)}`;
           btn.setAttribute('download', name);
           btn.textContent = 'Download';

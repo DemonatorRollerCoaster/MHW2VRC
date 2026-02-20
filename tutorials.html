@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tutorials | MHW 2 VRC</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .tutorial-label {
+      display: inline-block;
+      margin-left: 0;
+      padding: 2px 10px 2px 10px;
+      border-radius: 8px;
+      font-size: 0.98em;
+      font-weight: bold;
+      vertical-align: middle;
+      min-width: 170px;
+      text-align: center;
+    }
+    .label-green { background: #8DFFC7; color: #1a3d2c; border: 1.5px solid #3ec97a; }
+    .label-yellow { background: #fff7b2; color: #7a6a00; border: 1.5px solid #e6d14f; }
+    .label-red { background: #ffb2b2; color: #a10000; border: 1.5px solid #e64f4f; }
+    .tutorial-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px 18px;
+      margin-top: 32px;
+      max-width: 520px;
+      width: 100%;
+      align-items: center;
+    }
+    .tutorial-buttons-grid button {
+      width: 100%;
+      justify-self: start;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div id="blobsRoot" aria-hidden="true"></div>
+  <div class="content">
+    <h1>Tutorials</h1>
+    <div class="tutorial-buttons-grid">
+      <button class="top-button top-lilac" onclick="window.location.href='tutorial1.html'">Installing Unity Hub and the VRChat Creator Companion</button>
+      <span class="tutorial-label label-green">Finished with pictures, no video yet</span>
+      <button class="top-button top-mint" onclick="window.location.href='tutorial_unityinterface.html'">Exploring the Unity Engine interface and our VRChat World layout</button>
+      <span class="tutorial-label label-red">Empty</span>
+      <button class="top-button top-pink" onclick="window.location.href='tutorial_horizonworlds.html'">Exporting Meta Horizon Worlds Geometry and Textures</button>
+      <span class="tutorial-label label-red">Empty</span>
+      <button class="top-button top-mint" onclick="window.location.href='tutorial_alphas.html'">Fixing Transparent Alphas</button>
+      <span class="tutorial-label label-red">Empty</span>
+      <button class="top-button top-sky" onclick="window.location.href='tutorial_materials.html'">Creating Materials and Color Tints</button>
+      <span class="tutorial-label label-red">Empty</span>
+      <button class="top-button top-lilac" onclick="window.location.href='tutorial_prefabs.html'">Importing Prefabs and Unity Packages</button>
+      <span class="tutorial-label label-red">Empty</span>
+      <button class="top-button top-pink" onclick="window.location.href='tutorial_avpro.html'">Setting up a movie playlist and AVPro Player</button>
+      <span class="tutorial-label label-red">Empty</span>
+    </div>
+    <div style="margin-top:40px;">
+      <button class="top-button top-mint" onclick="window.location.href='index.html'">Back to Home</button>
+    </div>
+  </div>
+  <script>
+    // Matrix rain and blobs copied from index.html
+    // ...existing code...
+  </script>
+</body>
+</html>
