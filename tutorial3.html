@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Exporting Horizon Geometry And Textures | MHW 2 VRC</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .tutorial-step { margin: 48px auto 32px auto; max-width: 640px; text-align: center; background: rgba(191,161,255,0.08); border-radius: 16px; padding: 32px 24px 24px 24px; box-shadow: 0 4px 24px rgba(191,161,255,0.08); }
+    .tutorial-step h2 { font-size: 1.6em; color: #735AFF; margin-bottom: 18px; }
+    .tutorial-step p { font-size: 1.15em; color: #232323; margin-bottom: 18px; }
+    .tutorial-step a { font-weight: bold; }
+    .tutorial-step img { width: 100%; max-width: 560px; border-radius: 12px; box-shadow: 0 2px 16px rgba(141,255,199,0.13); margin-bottom: 8px; cursor: zoom-in; }
+    .back-link { display: inline-block; margin-top: 32px; color: #735AFF; text-decoration: underline; font-size: 1.1em; }
+    .tutorial-label {
+      display: inline-block;
+      margin: 0 18px;
+      padding: 2px 16px;
+      border-radius: 8px;
+      font-size: 1.02em;
+      font-weight: bold;
+      vertical-align: middle;
+      min-width: 120px;
+      text-align: center;
+    }
+    .label-green { background: #8DFFC7; color: #1a3d2c; border: 1.5px solid #3ec97a; }
+    .label-yellow { background: #fff7b2; color: #7a6a00; border: 1.5px solid #e6d14f; }
+    .follow-title { font-size:1.13em; color:#735AFF; font-weight:bold; margin-bottom:6px; margin-top:18px; text-align:center; }
+    .step-label { text-align:center; font-size:1.15em; color:#735AFF; font-weight:bold; margin-bottom:8px; }
+    .enlarge-tip { text-align:center; font-size:1.08em; color:#232323; margin-bottom:18px; }
+  </style>
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div id="blobsRoot" aria-hidden="true"></div>
+  <div class="content">
+    <h1>Exporting Horizon Geometry And Textures<br>and bringing them into Unity for VRChat</h1>
+    <div class="step-label">(17 Step tutorial with full video coming soon)</div>
+    <div class="enlarge-tip">CLICK A PICTURE TO ENLARGE IT.</div>
+    <div class="follow-title">Follow Along</div>
+    <div style="display:flex;justify-content:center;align-items:center;margin-bottom:18px;gap:32px;">
+      <span class="tutorial-label label-green"><a href="tutorial1.html" style="color:#228B22;text-decoration:underline;font-weight:bold;">Required: Tutorial 1</a></span>
+      <span class="tutorial-label label-yellow"><a href="tutorial2.html" style="color:goldenrod;text-decoration:underline;font-weight:bold;">Optional: Tutorial 2</a></span>
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 1</h2>
+      <p>This tutorial assumes you have already used either the standalone installer or the Meta Quest Link app for the Meta Horizon Worlds Desktop Editor at least once prior, and have already completed <a href="tutorial1.html" style="color:#735AFF;text-decoration:underline;font-weight:bold;">tutorial 1</a>. Open the desktop editor of your choice, then navigate to/ open a world of your choice.</p>
+      <img src="TutorialPics/tutorial3pic1.png" alt="Open Meta Horizon Worlds Desktop Editor screenshot">
+    </div>
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 2</h2>
+      <p>The world will then load.</p>
+      <img src="TutorialPics/tutorial3pic2.png" alt="World loading screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 3</h2>
+      <p>Please remember when you export a horizon world, you're strictly exporting the geometry, materials and textures. You cannot export text, code, lighting, gizmos or color tints for use within Unity or VRChat Creator Companion. However we will have tutorials for those as well! Do not worry! We are gonna take this building and bring it over to Unity. The silver and black will stay but the red you see won't as it is a color tint.</p>
+      <img src="TutorialPics/tutorial3pic3.png" alt="Exporting geometry, materials, textures screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 4</h2>
+      <p>Open the top left hamburger menu and click "Export Geometry"</p>
+      <img src="TutorialPics/tutorial3pic4.png" alt="Export Geometry menu screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 5</h2>
+      <p>Ensure you have export textures selected as you will more than likely not want to rebuild all of these.</p>
+      <img src="TutorialPics/tutorial3pic5.png" alt="Export textures option screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 6</h2>
+      <p>You can then name your FBX/world geometry and store it in an easily accessible folder of your choosing. I highly recommend a blank directory or a new folder.</p>
+      <img src="TutorialPics/tutorial3pic6.png" alt="Naming and saving FBX geometry screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 7</h2>
+      <p>(Minus the tutorial pictures and folders at the bottom hahaha) you will see your exported textures and your FBX in your chosen directory when it is finished. Do not be alarmed, we do not have to rebuild any of these objects or texture materials in Unity, as the data for them is hardcoded in your Meta Horizon World Export. Thank you Meta!</p>
+      <img src="TutorialPics/tutorial3pic7.png" alt="Exported textures and FBX screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 8</h2>
+      <p>Now we need to open up the VRChat Creator Companion app so we can open up our project. If you do not have a desktop shortcut for this you can search for it in your Windows Search bar.</p>
+      <img src="TutorialPics/tutorial3pic8.png" alt="VRChat Creator Companion app screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 9</h2>
+      <p>Open up your chosen project by clicking Open Project to the right of your world. Again, this tutorial assumes you've already at least completed <a href="tutorial1.html" style="color:#735AFF;text-decoration:underline;font-weight:bold;">tutorial 1</a> and have a blank VRChat world in Unity, as well as potentially exploring Unity's UI and layout in <a href="tutorial2.html" style="color:goldenrod;text-decoration:underline;font-weight:bold;">tutorial 2</a>.</p>
+      <img src="TutorialPics/tutorial3pic9.png" alt="Open Project in VRChat Creator Companion screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 10</h2>
+      <p>As you are aware if you have been following, this red runtime error is only because you may not have VRChat installed on your PC. This error does not affect us, and if you wish to you can clear it in the bottom left under the Project button.</p>
+      <img src="TutorialPics/tutorial3pic10.png" alt="Red runtime error screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 11</h2>
+      <p>Then we wanna click the project tab and then the assets tab under the favorites area (bottom left). We are going to take the FBX from MHW and drag and drop that into Models, then we will do the same for the textures and place them into Textures. In Meta Horizon Worlds, materials are embedded, so we don't have to import, create or edit these.</p>
+      <img src="TutorialPics/tutorial3pic11.png" alt="Project and assets tab screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 12</h2>
+      <p>Open up your file explorer in a minimized view to where you exported your Horizon World, and drag and drop that into your Models folder in your VRChat world Assets Panel (the folder to the left of the highlighted scenes folder)</p>
+      <img src="TutorialPics/tutorial3pic12.png" alt="Drag FBX into Models screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 13</h2>
+      <p>Note that my file explorer is obscuring our textures folder so you may need to move the explorer around to drag and drop your textures into the Textures folder. but you want to drag all exported textures into your textures folder. Feel free to navigate to/click the textures folder after to see all your textures.</p>
+      <img src="TutorialPics/tutorial3pic13.png" alt="Drag textures into Textures folder screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 14</h2>
+      <p>Perfect, all our textures made it! Lets back out of the textures folder by clicking the Assets tab either above the textures/assets viewport or to the left where it sats Assets with multiple folders (bottom left.)</p>
+      <img src="TutorialPics/tutorial3pic14.png" alt="Back out to Assets screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 15</h2>
+      <p>Now lets navigate to our models folder and view our imported world geometry! Nice! look at all those ready to go materials.</p>
+      <img src="TutorialPics/tutorial3pic15.png" alt="View imported world geometry screenshot">
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 16</h2>
+      <p>Now we need to drag and drop our world into our scene view. Then we want to reset the Unity transforms (position rotation scale) so that way it uses our exported Horizon transforms. This is important for preserving the size and placement of your prior Horizon World, and if that isn't important to you you can of course, skip this step.</p>
+      <video id="tutorial16vid" src="TutorialClips/tutorial3pic16video.mp4" autoplay loop muted playsinline style="width:100%;max-width:560px;border-radius:12px;box-shadow:0 2px 16px rgba(141,255,199,0.13);margin-bottom:8px;cursor:zoom-in;background:#232323;"></video>
+    </div>
+      <div class="tutorial-step">
+        <h2>Step 17</h2>
+        <p>Look at that! Your exported Horizon World in Unity, in the same placement and position, same scale, with all its textures ready to go! Check out <a href="tutorial4.html" style="color:#735AFF;text-decoration:underline;font-weight:bold;">Tutorial 4</a> and <a href="tutorial5.html" style="color:#735AFF;text-decoration:underline;font-weight:bold;">Tutorial 5</a> to see how to create your own color tints, materials, and even fix the obvious background planes that are missing their transparencies. (See behind the building the black wall, which should be a transparent cutout.)</p>
+        <img src="TutorialPics/tutorial3pic17.png" alt="Unity export with textures screenshot">
+      </div>
+    <a class="back-link" href="tutorials.html">&#8592; Back to Tutorials</a>
+  </div>
+  <script>
+    // Matrix rain and blobs copied from index.html
+    // ...existing code...
+    // Fullscreen image viewer for tutorial images
+    document.addEventListener('DOMContentLoaded', function() {
+      // Enlarge images
+      const imgs = document.querySelectorAll('.tutorial-step img');
+      imgs.forEach(img => {
+        img.addEventListener('click', function() {
+          const overlay = document.createElement('div');
+          overlay.style.position = 'fixed';
+          overlay.style.inset = 0;
+          overlay.style.background = 'rgba(0,0,0,0.92)';
+          overlay.style.zIndex = 9999;
+          overlay.style.display = 'flex';
+          overlay.style.alignItems = 'center';
+          overlay.style.justifyContent = 'center';
+          overlay.style.cursor = 'zoom-out';
+          overlay.tabIndex = 0;
+          const fullImg = document.createElement('img');
+          fullImg.src = img.src;
+          fullImg.alt = img.alt;
+          fullImg.style.maxWidth = '96vw';
+          fullImg.style.maxHeight = '96vh';
+          fullImg.style.borderRadius = '16px';
+          fullImg.style.boxShadow = '0 4px 32px #0008';
+          fullImg.style.background = '#232323';
+          overlay.appendChild(fullImg);
+          function removeOverlay() {
+            overlay.remove();
+            document.removeEventListener('keydown', escListener);
+          }
+          overlay.addEventListener('click', removeOverlay);
+          function escListener(e) {
+            if (e.key === 'Escape') removeOverlay();
+          }
+          document.addEventListener('keydown', escListener);
+          document.body.appendChild(overlay);
+          overlay.focus();
+        });
+      });
+      // Enlarge video for step 16
+      const vid = document.getElementById('tutorial16vid');
+      if (vid) {
+        vid.addEventListener('click', function() {
+          const overlay = document.createElement('div');
+          overlay.style.position = 'fixed';
+          overlay.style.inset = 0;
+          overlay.style.background = 'rgba(0,0,0,0.92)';
+          overlay.style.zIndex = 9999;
+          overlay.style.display = 'flex';
+          overlay.style.alignItems = 'center';
+          overlay.style.justifyContent = 'center';
+          overlay.style.cursor = 'zoom-out';
+          overlay.tabIndex = 0;
+          const fullVid = document.createElement('video');
+          fullVid.src = vid.src;
+          fullVid.autoplay = true;
+          fullVid.loop = true;
+          fullVid.muted = true;
+          fullVid.playsInline = true;
+          fullVid.style.maxWidth = '96vw';
+          fullVid.style.maxHeight = '96vh';
+          fullVid.style.borderRadius = '16px';
+          fullVid.style.boxShadow = '0 4px 32px #0008';
+          fullVid.style.background = '#232323';
+          overlay.appendChild(fullVid);
+          function removeOverlay() {
+            overlay.remove();
+            document.removeEventListener('keydown', escListener);
+          }
+          overlay.addEventListener('click', removeOverlay);
+          function escListener(e) {
+            if (e.key === 'Escape') removeOverlay();
+          }
+          document.addEventListener('keydown', escListener);
+          document.body.appendChild(overlay);
+          overlay.focus();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
