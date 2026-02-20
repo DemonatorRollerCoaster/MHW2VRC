@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MHW 2 VRC</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Matrix binary rain canvas (behind blobs) -->
+  <canvas id="matrix" aria-hidden="true"></canvas>
+
+  <!-- Dynamic blobs root -->
+  <div id="blobsRoot" aria-hidden="true"></div>
+
+  <div class="content">
+    <h1>MHW 2 VRC</h1>
+    
+    <div class="top-buttons" role="navigation" aria-label="top placeholders">
+      <button class="top-button top-lilac" id="btnHome">Home</button>
+      <button class="top-button top-pink" id="btnTutorial">Tutorial</button>
+      <button class="top-button top-mint" id="btnTools">Tools</button>
+      <button class="top-button top-sky" id="btnDownloads">Downloads</button>
+    </div>
+  </div>
+  <script>
+    // MATRIX RAIN (binary) - adapted from rhea.html, color-matched to blobs
+    (function(){
+      const canvas = document.getElementById('matrix');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
+      const chars = '01';
+      const charArray = chars.split('');
+      const fontSize = 16;
+      let columns = Math.floor(canvas.width / fontSize);
+      let drops = Array(columns).fill(1);
+      const matrixColors = ['#8DFFC7','#96DEFF','#D2B4FF','#735AFF','#AF55FF','#FF50AA'];
+
+      function hexToRgba(hex, a){
+        const h = hex.replace('#','');
+        const bigint = parseInt(h,16);
+        const r = (bigint>>16)&255, g=(bigint>>8)&255, b=bigint&255;
+        return `rgba(${r},${g},${b},${a})`;
+      }
+
+      function drawMatrix(){
+        // shifting pastel gradient background instead of black
+        const phase = (Date.now() % 10000) / 10000; // 0..1 slowly
+        const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+        for(let i=0;i<matrixColors.length;i++){
+          const offset = (i/(matrixColors.length-1) + phase) % 1;
+          grad.addColorStop(offset, hexToRgba(matrixColors[i], 0.12));
+        }
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        ctx.font = fontSize + 'px monospace';
+        for(let i=0;i<drops.length;i++){
+          const text = charArray[Math.floor(Math.random()*charArray.length)];
+          ctx.fillStyle = matrixColors[Math.floor(Math.random()*matrixColors.length)];
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+          ctx.fillText(text, x, y);
+          if(y > canvas.height && Math.random()>0.975) drops[i]=0;
+          drops[i]++;
+        }
+      }
+      setInterval(drawMatrix, 45);
+      window.addEventListener('resize', ()=>{
+        const newCols = Math.floor(canvas.width / fontSize);
+        if(newCols !== columns){ columns = newCols; drops = Array(columns).fill(1); }
+      });
+    })();
+
+    // DYNAMIC BLOBS with simple collision physics
+    (function(){
+      const ROOT = document.getElementById('blobsRoot');
+      const heading = document.querySelector('h1');
+      const COUNT = 1;
+      const blobs = [];
+      const rand = (a,b)=> a + Math.random()*(b-a);
+
+      function createBlob(sizeClass){
+        const el = document.createElement('div');
+        el.className = `morphing-container ${sizeClass} delay-0`;
+        el.innerHTML = '<div class="blob blob-layer-3"></div><div class="blob blob-layer-2"></div><div class="blob blob-layer-1"></div>';
+        ROOT.appendChild(el);
+        return el;
+      }
+
+      // create main blob anchored near heading
+      function headingCenter(){
+        const rect = heading.getBoundingClientRect();
+        return { x: rect.left + rect.width/2 + window.scrollX, y: rect.top + rect.height/2 + window.scrollY };
+      }
+
+      // compute shared anchor offset for main blob (kept slightly below buttons)
+      function getAnchorYOffset(){ return Math.min(window.innerHeight * 0.22, 180); }
+
+      // create blobs: single main blob positioned under the menu buttons
+      for(let i=0;i<COUNT;i++){
+        const sizeClass = 'main-blob';
+        const el = createBlob(sizeClass);
+        // initial placement
+        let w = el.offsetWidth || (sizeClass==='main-blob'? 480 : sizeClass==='small'? 340:220);
+        let h = el.offsetHeight || w;
+        let radius = Math.max(w,h)/2 * 0.42; // effective collision radius scaled down for overlap feel
+        let x,y;
+        // place the single main blob below the centered buttons
+        const centerX = window.innerWidth/2;
+        const centerY = window.innerHeight/2;
+        const anchorOffset = getAnchorYOffset(); // push blob down under buttons
+        x = centerX;
+        y = centerY + anchorOffset;
+        const seed = Math.random()*10;
+        const vx = rand(-0.8,0.8);
+        const vy = rand(-0.8,0.8);
+        const mass = radius*radius;
+        const blob = { el, x, y, vx, vy, r: radius, mass, seed, sizeClass, anchor:(i===0) };
+        // initial style
+        el.style.left = x + 'px'; el.style.top = y + 'px';
+        el.style.transform = 'translate(-50%,-50%) scale(1)';
+        blobs.push(blob);
+      }
+
+      let last = performance.now();
+      function resolveCollision(a,b){
+        const dx = b.x - a.x; const dy = b.y - a.y; let dist = Math.hypot(dx,dy);
+        if(dist === 0) { dist = 0.001; }
+          const padding = 12;
+          const minDist = a.r + b.r + padding;
+          if(dist < minDist){
+          const nx = dx/dist, ny = dy/dist;
+          const overlap = (minDist - dist);
+          const totalMass = a.mass + b.mass;
+          const sepFactor = 1.4; // stronger separation to avoid lingering overlap
+          // separate with stronger factor to avoid visual overlap
+          a.x -= nx * overlap * sepFactor * (b.mass/totalMass);
+          a.y -= ny * overlap * sepFactor * (b.mass/totalMass);
+          b.x += nx * overlap * sepFactor * (a.mass/totalMass);
+          b.y += ny * overlap * sepFactor * (a.mass/totalMass);
+          // velocity resolution (soft)
+          const relVel = (b.vx - a.vx)*nx + (b.vy - a.vy)*ny;
+          if(relVel < 0){
+            const e = 0.35; // slightly bouncier restitution
+            const j = -(1+e)*relVel / (1/a.mass + 1/b.mass);
+            a.vx -= (j * nx)/a.mass; a.vy -= (j * ny)/a.mass;
+            b.vx += (j * nx)/b.mass; b.vy += (j * ny)/b.mass;
+          }
+        }
+      }
+
+      function tick(now){
+        const dt = Math.min(0.032, (now-last)/1000); last = now;
+        // update main anchor target (viewport center shifted down by anchor offset)
+        const centerX = window.innerWidth/2;
+        const centerY = window.innerHeight/2;
+        const head = { x: centerX, y: centerY + getAnchorYOffset() };
+        for(let i=0;i<blobs.length;i++){
+          const b = blobs[i];
+          if(b.anchor){
+            // spring towards heading center (allow small wiggle)
+            const kx = (head.x - b.x) * 0.08;
+            const ky = (head.y - b.y) * 0.08;
+            b.vx += kx * dt; b.vy += ky * dt;
+          } else {
+            // small wandering force (stronger for visible motion)
+            const wander = 0.06;
+            b.vx += (Math.sin(now*0.001 + b.seed) * wander) * dt;
+            b.vy += (Math.cos(now*0.001 + b.seed) * wander) * dt;
+          }
+          // integrate
+          b.x += b.vx * 60 * dt; b.y += b.vy * 60 * dt;
+          // bounds (bounce)
+          const margin = 30;
+          const minX = margin, maxX = window.innerWidth - margin;
+          const minY = margin, maxY = window.innerHeight - margin;
+          if(b.x < minX){ b.x = minX; b.vx *= -0.7; }
+          if(b.x > maxX){ b.x = maxX; b.vx *= -0.7; }
+          if(b.y < minY){ b.y = minY; b.vy *= -0.7; }
+          if(b.y > maxY){ b.y = maxY; b.vy *= -0.7; }
+        }
+        // collisions
+        for(let i=0;i<blobs.length;i++){
+          for(let j=i+1;j<blobs.length;j++) resolveCollision(blobs[i], blobs[j]);
+        }
+        // damping and update DOM
+        for(const b of blobs){
+          b.vx *= 0.992; b.vy *= 0.992;
+          // scale pulse (vary amplitude by size)
+          const amp = (b.sizeClass==='tiny')? 0.14 : (b.sizeClass==='small')? 0.1 : 0.06;
+          const s = 1 + amp * Math.sin((now*0.0025) + b.seed*3);
+          b.el.style.left = b.x + 'px'; b.el.style.top = b.y + 'px';
+          b.el.style.transform = `translate(-50%,-50%) scale(${s})`;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      // adapt on resize
+      window.addEventListener('resize', ()=>{
+        // keep blobs inside viewport
+        for(const b of blobs){ b.x = Math.min(window.innerWidth-40, Math.max(40, b.x)); b.y = Math.min(window.innerHeight-40, Math.max(40, b.y)); }
+      });
+      // placeholder button behavior (reactive)
+      function setupTopButtons(){
+        const mappings = [
+          {id:'btnHome', name:'Home'},
+          {id:'btnTutorial', name:'Tutorial'},
+          {id:'btnTools', name:'Tools'},
+          {id:'btnDownloads', name:'Downloads'}
+        ];
+        mappings.forEach(m=>{
+          const el = document.getElementById(m.id);
+          if(!el) return;
+          el.addEventListener('click', ()=>{
+            // visual feedback
+            el.classList.add('pressed');
+            setTimeout(()=> el.classList.remove('pressed'), 180);
+            // placeholder action: log and briefly show a console message on the page
+            console.log(m.name + ' clicked');
+            const p = document.createElement('div'); p.textContent = m.name + ' (placeholder)';
+            p.style.position='fixed'; p.style.right='12px'; p.style.bottom='12px'; p.style.background='rgba(0,0,0,0.6)'; p.style.color='#fff'; p.style.padding='8px 12px'; p.style.borderRadius='6px'; p.style.zIndex=9999;
+            document.body.appendChild(p);
+            setTimeout(()=> p.remove(), 900);
+          });
+        });
+      }
+      setupTopButtons();
+    })();
+  </script>
+</body>
+</html>
