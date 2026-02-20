@@ -19,7 +19,8 @@
   <div id="blobsRoot" aria-hidden="true"></div>
   <div class="content">
     <h1>Installing Unity Hub & VRC Creator Companion</h1>
-    <div style="text-align:center;font-size:1.15em;color:#735AFF;font-weight:bold;margin-bottom:18px;">(20 step tutorial, video coming soon)</div>
+    <div style="text-align:center;font-size:1.15em;color:#735AFF;font-weight:bold;margin-bottom:8px;">(20 step tutorial, video coming soon)</div>
+    <div style="text-align:center;font-size:1.08em;color:#232323;margin-bottom:18px;">CLICK A PICTURE TO ENLARGE IT.</div>
     <div class="tutorial-step">
       <h2>Step 1</h2>
       <p>Navigate to <a href="https://vrchat.com/home/download" target="_blank" style="color:#735AFF;text-decoration:underline;font-weight:bold;">https://vrchat.com/home/download</a> and download the VRChat Creator Companion. If you haven't already, you'll need to sign up for a VRChat account.</p>
@@ -125,6 +126,51 @@
   <script>
     // Matrix rain and blobs copied from index.html
     // ...existing code...
+    // Fullscreen image viewer for tutorial images
+    document.addEventListener('DOMContentLoaded', function() {
+      const imgs = document.querySelectorAll('.tutorial-step img');
+      imgs.forEach(img => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', function() {
+          // Create overlay
+          const overlay = document.createElement('div');
+          overlay.style.position = 'fixed';
+          overlay.style.inset = 0;
+          overlay.style.background = 'rgba(0,0,0,0.92)';
+          overlay.style.zIndex = 9999;
+          overlay.style.display = 'flex';
+          overlay.style.alignItems = 'center';
+          overlay.style.justifyContent = 'center';
+          overlay.style.cursor = 'zoom-out';
+          overlay.tabIndex = 0;
+
+          // Clone image
+          const fullImg = document.createElement('img');
+          fullImg.src = img.src;
+          fullImg.alt = img.alt;
+          fullImg.style.maxWidth = '96vw';
+          fullImg.style.maxHeight = '96vh';
+          fullImg.style.borderRadius = '16px';
+          fullImg.style.boxShadow = '0 4px 32px #0008';
+          fullImg.style.background = '#232323';
+          overlay.appendChild(fullImg);
+
+          // Remove overlay on click or Esc
+          function removeOverlay() {
+            overlay.remove();
+            document.removeEventListener('keydown', escListener);
+          }
+          overlay.addEventListener('click', removeOverlay);
+          function escListener(e) {
+            if (e.key === 'Escape') removeOverlay();
+          }
+          document.addEventListener('keydown', escListener);
+
+          document.body.appendChild(overlay);
+          overlay.focus();
+        });
+      });
+    });
   </script>
 </body>
 </html>
