@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MHW2VRC Downloads</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .downloads-root{ padding:6vh 6vw 10vh 6vw; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+    .downloads-list{ width:100%; max-width:960px; margin-top:28px; display:flex; flex-direction:column; gap:12px; }
+    .download-item{ display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.02); border: 1px solid rgba(0,0,0,0.06); padding:12px 16px; border-radius:10px; }
+    .download-title{ font-size:18px; color:var(--text); }
+    .download-btn{ background:transparent; border:2px solid; padding:8px 12px; border-radius:8px; cursor:pointer; color:inherit; text-decoration:none; }
+    .download-btn.mint{ border-color: rgba(141,255,199,0.9); color:#8DDFBF; }
+    .download-btn.pink{ border-color: rgba(216,108,159,0.9); color:#D86C9F; }
+    .download-btn.lilac{ border-color: rgba(191,161,255,0.9); color:#BFA1FF; }
+    .download-btn.sky{ border-color: rgba(79,183,230,0.9); color:#4FB7E6; }
+    .page-header{ margin-top:22px; font-size: clamp(28px,5vw,40px); }
+    .back-link{ margin-top:12px; color:#999; text-decoration:underline; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="downloads-root">
+    <h1 class="page-header">Downloads</h1>
+    <div id="list" class="downloads-list">Loading…</div>
+    <a class="back-link" href="index.html">← Back to Home</a>
+  </div>
+
+  <script>
+    (function(){
+      const owner = 'DemonatorRollerCoaster';
+      const repo = 'MHW2VRC';
+      const branch = 'gh-pages';
+      const path = 'assetDownloads';
+      const listEl = document.getElementById('list');
+
+      function makeButton(name, i){
+        const btn = document.createElement('a');
+        btn.className = 'download-btn ' + (['mint','pink','lilac','sky'][i % 4] || 'mint');
+        const raw = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}/${encodeURIComponent(name)}`;
+        btn.href = raw;
+        btn.setAttribute('download', name);
+        btn.textContent = 'Download';
+        btn.target = '_blank';
+        return btn;
+      }
+
+      // First try local API (when running via app.py)
+      fetch('/api/downloads')
+        .then(r => r.json())
+        .then(data => {
+          if(data.files && data.files.length){
+            listEl.innerHTML = '';
+            data.files.sort();
+            data.files.forEach((name, idx)=>{
+              const row = document.createElement('div'); row.className = 'download-item';
+              const title = document.createElement('div'); title.className = 'download-title'; title.textContent = name.replace(/(\.zip|\.unitypackage)$/i,'');
+              const btn = document.createElement('a');
+              btn.className = 'download-btn ' + (['mint','pink','lilac','sky'][idx % 4] || 'mint');
+              btn.href = `assetDownloads/${encodeURIComponent(name)}`;
+              btn.setAttribute('download', name);
+              btn.textContent = 'Download';
+              row.appendChild(title); row.appendChild(btn); listEl.appendChild(row);
+            });
+            return;
+          }
+          // fallback to GitHub API if local folder is empty or unavailable
+          return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`)
+            .then(r=>{
+              if(!r.ok) throw new Error('Unable to list files from GitHub');
+              return r.json();
+            })
+            .then(items=>{
+              const files = items.filter(i=> i.type === 'file' && (i.name.toLowerCase().endsWith('.zip') || i.name.toLowerCase().endsWith('.unitypackage')) );
+              if(!files.length){ listEl.textContent = 'No downloads found in the assetDownloads folder.'; return; }
+              listEl.innerHTML = '';
+              files.sort((a,b)=> a.name.localeCompare(b.name, undefined, {numeric:true, sensitivity:'base'}));
+              files.forEach((f, idx)=>{
+                const row = document.createElement('div'); row.className = 'download-item';
+                const title = document.createElement('div'); title.className = 'download-title';
+                // strip either .zip or .unitypackage
+                title.textContent = f.name.replace(/(\.zip|\.unitypackage)$/i,'');
+                const btn = makeButton(f.name, idx);
+                // add a small type marker
+                const ext = f.name.split('.').pop().toLowerCase();
+                if(ext === 'unitypackage') btn.title = 'Unity package';
+                row.appendChild(title); row.appendChild(btn); listEl.appendChild(row);
+              });
+            });
+        })
+        .catch(err=>{ listEl.textContent = 'Error loading downloads: ' + err.message; });
+    })();
+  </script>
+</body>
+</html>

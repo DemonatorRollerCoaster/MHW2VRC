@@ -219,7 +219,16 @@
             // visual feedback
             el.classList.add('pressed');
             setTimeout(()=> el.classList.remove('pressed'), 180);
-            // placeholder action: log and briefly show a console message on the page
+            // navigation for specific buttons
+            if(m.id === 'btnDownloads'){
+              window.location.href = 'downloads.html';
+              return;
+            }
+            if(m.id === 'btnHome'){
+              window.location.href = 'index.html';
+              return;
+            }
+            // placeholder action for remaining buttons
             console.log(m.name + ' clicked');
             const p = document.createElement('div'); p.textContent = m.name + ' (placeholder)';
             p.style.position='fixed'; p.style.right='12px'; p.style.bottom='12px'; p.style.background='rgba(0,0,0,0.6)'; p.style.color='#fff'; p.style.padding='8px 12px'; p.style.borderRadius='6px'; p.style.zIndex=9999;
