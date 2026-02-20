@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MHW2VRC Downloads</title>
+  <title>VRC Public Asset Library</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     .downloads-root{ padding:6vh 6vw 10vh 6vw; min-height:100vh; display:flex; flex-direction:column; align-items:center; z-index:2; position:relative; }
     .downloads-list{ width:100%; max-width:960px; margin-top:28px; display:flex; flex-direction:column; gap:12px; z-index:2; position:relative; }
-    .download-item{ display:flex; justify-content:space-between; align-items:center; border: 1px solid rgba(0,0,0,0.06); padding:12px 16px; border-radius:10px; }
-    .download-title{ font-size:18px; color:var(--text); border-radius:8px; padding:6px 12px; background: var(--dl-title-bg, #f3e8ff); transition: background 0.3s; }
+    .download-item{ display:flex; flex-direction:column; align-items:flex-start; border: 1px solid rgba(0,0,0,0.06); padding:12px 16px; border-radius:10px; background:rgba(255,255,255,0.03); }
+    .download-title{ font-size:18px; color:var(--text); border-radius:8px; padding:6px 12px; background: var(--dl-title-bg, #f3e8ff); transition: background 0.3s; margin-bottom:2px; }
     .download-title.mint{ background: linear-gradient(90deg,#e9fff6 60%,#8DFFC7 100%); }
     .download-title.pink{ background: linear-gradient(90deg,#ffeaf6 60%,#D86C9F 100%); }
     .download-title.lilac{ background: linear-gradient(90deg,#f3e8ff 60%,#BFA1FF 100%); }
     .download-title.sky{ background: linear-gradient(90deg,#e9f7ff 60%,#4FB7E6 100%); }
+    .download-meta{ font-size:0.98em; color:#444; margin-bottom:4px; margin-left:2px; }
+    .download-desc{ font-size:1.04em; color:#232323; margin-bottom:8px; margin-left:2px; }
     .download-btn{ background:#232323; border:2px solid; padding:8px 12px; border-radius:8px; cursor:pointer; color:inherit; text-decoration:none; transition: background 0.3s; }
     .download-btn.mint{ border-color: rgba(141,255,199,0.9); color:#8DDFBF; }
     .download-btn.pink{ border-color: rgba(216,108,159,0.9); color:#D86C9F; }
@@ -27,7 +29,7 @@
   <canvas id="matrix" aria-hidden="true"></canvas>
   <div id="blobsRoot" aria-hidden="true"></div>
   <div class="downloads-root">
-    <h1 class="page-header">Downloads</h1>
+    <h1 class="page-header">VRC Public Asset Library</h1>
     <div id="list" class="downloads-list">Loading…</div>
     <a class="back-link" href="index.html">← Back to Home</a>
   </div>
@@ -213,13 +215,251 @@
         names.forEach((name, idx)=>{
           const colorClass = ['mint','pink','lilac','sky'][idx % 4] || 'mint';
           const row = document.createElement('div'); row.className = 'download-item';
+          const rowTop = document.createElement('div'); rowTop.style.display = 'flex'; rowTop.style.alignItems = 'center'; rowTop.style.width = '100%';
           const title = document.createElement('div'); title.className = 'download-title ' + colorClass; title.textContent = name.replace(/(\.zip|\.unitypackage)$/i,'');
+          title.style.flex = '1';
           const btn = document.createElement('a');
           btn.className = 'download-btn ' + colorClass;
           btn.href = `assetDownloads/${encodeURIComponent(name)}`;
           btn.setAttribute('download', name);
           btn.textContent = 'Download';
-          row.appendChild(title); row.appendChild(btn); listEl.appendChild(row);
+          rowTop.appendChild(title);
+          rowTop.appendChild(btn);
+          row.appendChild(rowTop);
+          // Add creator and description for specific assets
+          let meta, desc;
+          if (name.toLowerCase().includes('pigeon')) {
+            meta = 'Creator: Steve The Mitochondria';
+            desc = 'Simple drag & drop Pigeon NPCs to liven up a world. Comes with a few behavior variations.';
+          } else if (name.toLowerCase().includes('avatar_menu')) {
+            meta = 'Creator: Steve The Mitochondria';
+            desc = 'Required before importing:\n-VRCSDK3\n-Udon Sharp\nOriginal design by VoidCake: A scrolling UI menu that can store several avatars. Thanks to Varneon for helping with the UI.';
+          } else if (name.toLowerCase().includes('portable-panel-for-uis-and-menus')) {
+            meta = 'Creator: MyroP';
+            desc = 'A script for a customizable portable panel that can be used in any VRC world. You can use it to create menus, portable video players etc.';
+          } else if (name.toLowerCase().includes('emychess_0.1.2') || name.toLowerCase().includes('emychess_0.1.3')) {
+            meta = 'Creator: emymin';
+            desc = 'Udon Chess Prefab for VRChat';
+          } else if (name.toLowerCase().includes('udonportals')) {
+            meta = 'Creator: aurycat';
+            desc = 'This prefab lets you create visual portals in VRChat worlds that can be looked through, walked through, fallen through, and appear as high quality as a Mirror. Even pickups can be thrown through the portals!';
+          } else if (name.toLowerCase().includes('iwasync3_v3.8.0musicplayer')) {
+            meta = 'Creator: Hoshino Labs';
+            desc = 'A fully featured media player, with a LOT of options and a neat desktop interface. Supports playlists as well as many other nice features.';
+          } else if (name.toLowerCase().includes('vrcaxethrowing-master')) {
+            meta = 'Creator: mahu';
+            desc = 'Axe Throwing game with multiple game modes, improved VR throwing, and physics simulation.';
+          }
+          if (meta && desc) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = meta;
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = desc;
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          // Add new assets
+          if (name.toLowerCase().includes('vrc-animation-sync-main')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Sayamame';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A system for SDK3 with "Animation synchronization function" and "Event firing function". The included "Full" version prefab will synchronize parameters, playing states, and time for all layers in the Animator given by Inspector. This system uses UdonGraph only.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('udonsnake_by_paci')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Paci Stardust';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Udon Snake is a U# based Snake port for VRChat!\n\nEverything is customizable without needing any Udon or U# knowledge!\n\nFeatures:\n-Customizable Size options\n-Color Options\n-Custom Tile support\n-Obstacles and Maps\n\nFile comes with the versions shown in the pictures. If you make a better UI for this please let me know, I would add it to the package with credits.\n\nNotice:\nPlease read the README if you have issues\n\nLicense:\nhttps://creativecommons.org/licenses/by-sa/4.0/';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('simpleudonelevator-main')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Lilithe Lotor';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A simple elevator platform compatible with Udon Object Sync which maintains network synchronization while the platform is moving.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('crazy8ballv1.2full')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Dyslex1k & Crazium';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A Magic 8 Ball prefab designed to give a random answer to any question you ask it!\nTo setup: Just drag the "Crazy 8 Ball Full" prefab anywhere in your scene, and in-game just grab the Crazy 8 Ball, ask it a yes or no question, shake it, and it will give you an answer!\nAnswers are synced with all players, so everyone will see the same response.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('udon_wordle_by_paci')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Paci Stardust';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Udon Wordle is a U# based Wordle port for VRChat!\n\nEverything is customizable without needing any Udon or U# knowledge!\n\nFeatures:\n-Customizable Size options\n-Color Options\n-Custom Wordlist support\n\nFile comes with the versions shown in the pictures. If you make a better UI for this please let me know, I would add it to the package with credits.\n\nNotice:\nPlease read the README if you have issues\n\nLicense:\nhttps://creativecommons.org/licenses/by-sa/4.0/';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('udon_minesweeper_by_paci_v1.2')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Paci Stardust';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Udon Minesweeper is a U# based Minesweeper port for VRChat!\n\nEverything is customizable without needing any Udon or U# knowledge!\n\nFeatures:\n-Customizable Size options\n-Three Game modes (Regular, Custom, Tower)\n-Overrides for textures\n-Custom difficulty settings\n\nFile comes with the version shown in the pictures. If you make a better UI for this please let me know, I would add it to the package with credits.\n\nChangelog:\nv1.2: Added another design\nv1.1: Fixed an issue making it unable to be used in newer U# versions\n\nLicense:\nhttps://creativecommons.org/licenses/by-sa/4.0/';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('pacirandomaudio1.2')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Paci Stardust';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Random Audio Player is a U# Prefab for playing random audio in your map, synced or local!\n\nEverything is customizable without needing any Udon or U# knowledge but with U# you can do some extra things!\n\nFeatures:\n- Synced and Unsynced Versions\n- Ability to play random audio on buttonpress\n- Set to play random audio every x to y seconds\n- Individual chance and pitch settings for each clip\n- An API to do even more with the prefab\n\nThis tool can be used to just make buttons to play random sounds and also for ambience systems in maps.\n\nNotice:\nPlease read the README if you have issues\n\nUpdate 1.1:\n- Fixed an issue with the synced version of ForcePlay\n- Added RandomAudioButton prefabs\n\nUpdate 1.2:\n- Fixed audio clip duration not being respected\n- Fixed crash caused by missing weights\n\nLicense:\nhttps://creativecommons.org/licenses/by-sa/4.0/';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('okdrawingprefab_v1')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Kenoli';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Configurable brushes, color blending, resizable canvas, layers, image sync, owner lock.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('player_count_toggle')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: v';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Turns on and off game objects based on the number of players in the instance.\n\nPrefab comes with demo GameObjects.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('neverhaveiever_v.1')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Fionna';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'It comes with a microphone, automatic scoreboard, and light-up floor panels. The microphone start panel can be customized with question suggestions.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('beerpong_v.1.1')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Fionna';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'This prefab is built to official beer pong competition dimensions!';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('udon-record-player-main')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Vard & Temmie Dola';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'An interactive vinyl record player for vrchat';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('skee-ball.v1.4.3.unitypackage')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Pyralix';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A functional, accessible, and networked Skee-ball machine with a high score tracker, ball counter, score counter, reset button, and a ball booster if you need a little help on the ramp!';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('deck_of_cards_1.5.2')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Vowgan';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Here is a deck of cards that you can use in your world! Place it down and you\'re ready to go. You can even add a "Reset" button that lets you reset the entire deck back to normal.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('thry_udonpackage_2025.2.0')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Thryrallo';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Beer Pong with better ball and cup sync, different modes, multiple players and more';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('fionna_cyantrigger_spinthebottle.v1.0')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Fionna';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'This is a "Spin The Bottle" prefab using CyanTrigger. You can drop this prefab directly into your SDK3 world for VRChat. The YouTube tutorial demonstrates how to build this from scratch.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('candle_v2')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Clearly';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Candle is a tablet for reading books in virtual reality. It looks and feels like a real Kindle. Easy to publish books on and easy for people to read from. No coding experience required!';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('protv_v2.3.01') || name.toLowerCase().includes('protv_v2.3.15') || name.toLowerCase().includes('protv_v3.0_beta')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: ArchiTechAnon';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A ready-made, full featured Multi-VideoPlayer management asset. Supports customizable plugins such as MediaControls, Playlists, Queues, 360 Skybox Video, VoteSkip, and AudioLink integration. Runs great with livestreams like VRCDN and on Quest.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('findyourfriends_v2.0.1')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Joker is punk';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A UI panel that lets players scroll through the list of connected players and teleport to them. There\'s also a "Hide me" option.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('easybuttons-main')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: BananaBread';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Easy Buttons is a prefab, that is made for people who aren\'t familiar with coding.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('musicplayer')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: _pi_';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'Music player based on URLs with full sync (everyone hears the same song at the same time), auto-shuffle and song preloading.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('playerlist')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: _pi_';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'A synced player list that displays each player\'s local time and how long they\'ve been in the instance. Full late-joiner support.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('dailyjapanesevrc')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: YukimuraKyoko';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'The prefab can switch and toggle between: Hiragana, Katakana, Kanji (All N levels), Grammar (All N levels), and Vocabulary (All N levels)';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('vrcbce.1.6.0_b3')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Hannah "FairlySadPanda" Dawson';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'VRCBilliards: Community Edition, A gigantic overhaul of the original 8Ball prefab. 4 types of pool for 1-4 players!';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          if (name.toLowerCase().includes('kb_rpg_system_12.4.21')) {
+            const metaDiv = document.createElement('div'); metaDiv.className = 'download-meta'; metaDiv.textContent = 'Creator: Dorktoast';
+            metaDiv.style.textAlign = 'center'; metaDiv.style.fontWeight = 'bold';
+            const descDiv = document.createElement('div'); descDiv.className = 'download-desc'; descDiv.textContent = 'This integration based on Cyan\'s player object pool adds an integrated world menu, character labels, and dice rollers/randomizers for playing tabletop RPGs and LARPs inside VRChat. Includes a storyteller panel that gives game-runners utilities like teleporting and worldwide announcements.';
+            descDiv.style.textAlign = 'center'; descDiv.style.fontWeight = 'bold';
+            row.appendChild(metaDiv);
+            row.appendChild(descDiv);
+          }
+          listEl.appendChild(row);
         });
       }
 
