@@ -45,50 +45,60 @@
         return btn;
       }
 
-      // First try local API (when running via app.py)
-      fetch('/api/downloads')
-        .then(r => r.json())
-        .then(data => {
-          if(data.files && data.files.length){
-            listEl.innerHTML = '';
-            data.files.sort();
-            data.files.forEach((name, idx)=>{
-              const row = document.createElement('div'); row.className = 'download-item';
-              const title = document.createElement('div'); title.className = 'download-title'; title.textContent = name.replace(/(\.zip|\.unitypackage)$/i,'');
-              const btn = document.createElement('a');
-              btn.className = 'download-btn ' + (['mint','pink','lilac','sky'][idx % 4] || 'mint');
-              btn.href = `assetDownloads/${encodeURIComponent(name)}`;
-              btn.setAttribute('download', name);
-              btn.textContent = 'Download';
-              row.appendChild(title); row.appendChild(btn); listEl.appendChild(row);
+      function renderFilesArray(names){
+        if(!names || !names.length){ listEl.textContent = 'No downloads found in the assetDownloads folder.'; return; }
+        listEl.innerHTML = '';
+        names.sort();
+        names.forEach((name, idx)=>{
+          const row = document.createElement('div'); row.className = 'download-item';
+          const title = document.createElement('div'); title.className = 'download-title'; title.textContent = name.replace(/(\.zip|\.unitypackage)$/i,'');
+          const btn = document.createElement('a');
+          btn.className = 'download-btn ' + (['mint','pink','lilac','sky'][idx % 4] || 'mint');
+          // local link to assetDownloads when hosted on gh-pages raw will be used in fallback
+          btn.href = `assetDownloads/${encodeURIComponent(name)}`;
+          btn.setAttribute('download', name);
+          btn.textContent = 'Download';
+          row.appendChild(title); row.appendChild(btn); listEl.appendChild(row);
+        });
+      }
+
+      function fetchFromGitHub(){
+        return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`)
+          .then(r=>{
+            if(!r.ok) throw new Error('Unable to list files from GitHub');
+            return r.json();
+          })
+          .then(items=>{
+            const files = items.filter(i=> i.type === 'file' && (i.name.toLowerCase().endsWith('.zip') || i.name.toLowerCase().endsWith('.unitypackage')) ).map(i=>i.name);
+            if(!files.length) { listEl.textContent = 'No downloads found in the assetDownloads folder.'; return; }
+            renderFilesArray(files);
+          });
+      }
+
+      // If running locally (dev server), try local API first. On GitHub Pages the /api endpoint returns HTML, so skip trying it there.
+      const host = window.location.hostname;
+      const isLocal = host === '127.0.0.1' || host === 'localhost';
+      if(isLocal){
+        fetch('/api/downloads')
+          .then(r => {
+            const ct = r.headers.get('content-type') || '';
+            if(!ct.includes('application/json')){
+              // not JSON (likely 404 HTML from static host) — fallback to GitHub
+              return fetchFromGitHub();
+            }
+            return r.json().then(data => {
+              if(data.files && data.files.length){ renderFilesArray(data.files); }
+              else { return fetchFromGitHub(); }
             });
-            return;
-          }
-          // fallback to GitHub API if local folder is empty or unavailable
-          return fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`)
-            .then(r=>{
-              if(!r.ok) throw new Error('Unable to list files from GitHub');
-              return r.json();
-            })
-            .then(items=>{
-              const files = items.filter(i=> i.type === 'file' && (i.name.toLowerCase().endsWith('.zip') || i.name.toLowerCase().endsWith('.unitypackage')) );
-              if(!files.length){ listEl.textContent = 'No downloads found in the assetDownloads folder.'; return; }
-              listEl.innerHTML = '';
-              files.sort((a,b)=> a.name.localeCompare(b.name, undefined, {numeric:true, sensitivity:'base'}));
-              files.forEach((f, idx)=>{
-                const row = document.createElement('div'); row.className = 'download-item';
-                const title = document.createElement('div'); title.className = 'download-title';
-                // strip either .zip or .unitypackage
-                title.textContent = f.name.replace(/(\.zip|\.unitypackage)$/i,'');
-                const btn = makeButton(f.name, idx);
-                // add a small type marker
-                const ext = f.name.split('.').pop().toLowerCase();
-                if(ext === 'unitypackage') btn.title = 'Unity package';
-                row.appendChild(title); row.appendChild(btn); listEl.appendChild(row);
-              });
-            });
-        })
-        .catch(err=>{ listEl.textContent = 'Error loading downloads: ' + err.message; });
+          })
+          .catch(err=>{
+            // if local API failed, fallback to GitHub
+            fetchFromGitHub().catch(e=> { listEl.textContent = 'Error loading downloads: ' + e.message; });
+          });
+      } else {
+        // live site: use GitHub API directly
+        fetchFromGitHub().catch(e=> { listEl.textContent = 'Error loading downloads: ' + e.message; });
+      }
     })();
   </script>
 </body>
