@@ -7,10 +7,42 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div id="blobsRoot" aria-hidden="true"></div>
   <div class="content">
-    <h1>Tutorial 4 Placeholder</h1>
-    <p>This is a placeholder for Tutorial 4. Content coming soon.</p>
-    <a class="back-link" href="tutorials.html">&#8592; Back to Tutorials</a>
+    <h1>Fixing Transparent Alphas</h1>
+    <div class="tutorial-step" style="margin: 48px auto 32px auto; max-width: 640px; text-align: center; background: rgba(191,161,255,0.08); border-radius: 16px; padding: 32px 24px 24px 24px; box-shadow: 0 4px 24px rgba(191,161,255,0.08);">
+      <h2>Step 1: Watch the Video Tutorial</h2>
+      <p>This step-by-step video will walk you through fixing transparent alphas in Unity for VRChat worlds.</p>
+      <div style="display:flex;justify-content:center;">
+        <iframe class="video-embed" id="yt-video" src="https://www.youtube.com/embed/8futAkNCjI8" title="YouTube video player" frameborder="0" allowfullscreen style="width:100%;max-width:560px;aspect-ratio:16/9;border-radius:12px;box-shadow:0 2px 16px rgba(141,255,199,0.13);margin-bottom:8px;cursor:zoom-in;"></iframe>
+      </div>
+      <div class="enlarge-tip">CLICK THE VIDEO TO ENLARGE IT.</div>
+    </div>
+    <a href="tutorials.html" class="top-button top-mint" style="margin-top: 32px;">&larr; Back to Tutorials</a>
   </div>
+  <script>
+    // Click-to-enlarge for YouTube video
+    const yt = document.getElementById('yt-video');
+    yt.style.cursor = 'zoom-in';
+    yt.addEventListener('click', function() {
+      const modal = document.createElement('div');
+      modal.style.position = 'fixed';
+      modal.style.top = 0;
+      modal.style.left = 0;
+      modal.style.width = '100vw';
+      modal.style.height = '100vh';
+      modal.style.background = 'rgba(0,0,0,0.85)';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = 9999;
+      modal.innerHTML = "<span style='position:absolute;top:32px;right:48px;color:#fff;font-size:2.5em;cursor:pointer;z-index:10000;'>&times;</span>" +
+        "<iframe src='https://www.youtube.com/embed/8futAkNCjI8?autoplay=1' allowfullscreen style='width:90vw;height:50vw;max-width:1200px;max-height:70vh;border-radius:18px;border:none;'></iframe>";
+      document.body.appendChild(modal);
+      modal.querySelector('span').onclick = () => modal.remove();
+      modal.onclick = (e) => { if(e.target === modal) modal.remove(); };
+    });
+  </script>
 </body>
 </html>

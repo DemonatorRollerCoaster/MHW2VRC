@@ -1,3 +1,47 @@
+.top-red{
+  color: #FF2222 !important;
+  border-color: #FF2222 !important;
+  background: #232323 !important;
+}
+/* Fiery blob color override for VRChat Worlds */
+.blob-fiery .blob-layer-1 {
+  background: linear-gradient(120deg, #FF2222, #FF6A00, #FFB300, #FFF200, #111111);
+  background-size: 600% 600%;
+  animation: liquidMorph 3.2s ease-in-out infinite, rapidGradientShift 6s ease-in-out infinite;
+  box-shadow:
+    0 0 18px rgba(255, 34, 34, 0.5),
+    0 0 30px rgba(255, 106, 0, 0.35),
+    0 0 42px rgba(255, 179, 0, 0.25),
+    inset 0 0 10px rgba(255,255,255,0.08);
+}
+.blob-fiery .blob-layer-2 {
+  background: radial-gradient(circle, #FF6A00, #FF2222 80%, #111111 100%);
+  animation: liquidMorph 3.6s ease-in-out infinite reverse, liquidPulse 4.5s ease-in-out infinite;
+  filter: blur(3px);
+  opacity: 0.95;
+}
+.blob-fiery .blob-layer-3 {
+  background: radial-gradient(ellipse, #FFB300, #FF2222 60%, transparent 80%);
+  animation: liquidMorph 4.0s ease-in-out infinite, liquidRotate 18s linear infinite;
+  filter: blur(4px);
+  opacity: 0.92;
+}
+/* PayPal overlap button styling */
+.paypal-overlap {
+  position: fixed;
+  left: 50%;
+  top: 72%; /* moved up a bit */
+  transform: translate(-50%, -50%);
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255,255,255,0.10);
+  padding: 18px 24px 12px 24px;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(80,80,120,0.10);
+  pointer-events: auto;
+}
 /* MHW 2 VRC — Liquid Background Styles */
 :root{
   --bg: #fff;
@@ -58,6 +102,8 @@ h1{
 .top-pink{ color: #D86C9F; border-color: rgba(216,108,159,0.9); }
 .top-mint{ color: #5CCDA2; border-color: rgba(92,205,162,0.9); }
 .top-sky{ color: #4FB7E6; border-color: rgba(79,183,230,0.9); }
+.top-indigo{ color: #4B3C8C; border-color: #4B3C8C; background: #232323 !important; }
+.top-hotpink{ color: #FF267A; border-color: #FF267A; background: #232323 !important; }
 /* Keep outline color, but add visible border */
 .top-button.top-lilac, .top-button.top-pink, .top-button.top-mint, .top-button.top-sky {
   border-color: currentColor;
