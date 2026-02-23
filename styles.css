@@ -87,7 +87,34 @@ h1{
 }
 
 /* Top placeholder buttons */
-.top-buttons{ display:flex; gap:12px; position:fixed; left:50%; top:42%; transform:translate(-50%,-50%); margin:0; z-index:20; }
+.top-buttons{
+  display:flex;
+  gap:12px;
+  position:fixed;
+  left:50%;
+  top:42%;
+  transform:translate(-50%,-50%);
+  margin:0;
+  z-index:20;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 98vw;
+}
+
+@media (max-width: 700px) {
+  .top-buttons {
+    position: static;
+    transform: none;
+    margin: 18px auto 0 auto;
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .content {
+    padding-top: 18vw;
+  }
+}
 .top-button{
   background: #232323 !important;
   border: 2px solid transparent;
