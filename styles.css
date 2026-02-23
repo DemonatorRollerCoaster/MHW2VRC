@@ -29,9 +29,11 @@
 /* PayPal overlap button styling */
 .paypal-overlap {
   position: fixed;
-  left: 50%;
-  top: 72%; /* moved up a bit */
-  transform: translate(-50%, -50%);
+  right: 32px;
+  bottom: 32px;
+  left: auto;
+  top: auto;
+  transform: none;
   z-index: 12;
   display: flex;
   flex-direction: column;
@@ -102,8 +104,8 @@ h1{
 .top-pink{ color: #D86C9F; border-color: rgba(216,108,159,0.9); }
 .top-mint{ color: #5CCDA2; border-color: rgba(92,205,162,0.9); }
 .top-sky{ color: #4FB7E6; border-color: rgba(79,183,230,0.9); }
-.top-indigo{ color: #4B3C8C; border-color: #4B3C8C; background: #232323 !important; }
-.top-hotpink{ color: #FF267A; border-color: #FF267A; background: #232323 !important; }
+.top-indigo{ color: #4B3C8C !important; border-color: #4B3C8C !important; background: #232323 !important; }
+.top-hotpink{ color: #FF267A !important; border-color: #FF267A !important; background: #232323 !important; }
 /* Keep outline color, but add visible border */
 .top-button.top-lilac, .top-button.top-pink, .top-button.top-mint, .top-button.top-sky {
   border-color: currentColor;
