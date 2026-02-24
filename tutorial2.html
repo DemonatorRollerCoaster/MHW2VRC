@@ -13,6 +13,20 @@
     .back-link { display: inline-block; margin-top: 32px; color: #735AFF; text-decoration: underline; font-size: 1.1em; }
     .step-label { text-align:center; font-size:1.15em; color:#735AFF; font-weight:bold; margin-bottom:8px; }
     .enlarge-tip { text-align:center; font-size:1.08em; color:#232323; margin-bottom:18px; }
+    .tutorial-label {
+      display: inline-block;
+      margin: 0 18px;
+      padding: 2px 16px;
+      border-radius: 8px;
+      font-size: 1.02em;
+      font-weight: bold;
+      vertical-align: middle;
+      min-width: 120px;
+      text-align: center;
+    }
+    .label-green { background: #8DFFC7; color: #1a3d2c; border: 1.5px solid #3ec97a; }
+    .label-yellow { background: #fff7b2; color: #7a6a00; border: 1.5px solid #e6d14f; }
+    .follow-title { font-size:1.13em; color:#735AFF; font-weight:bold; margin-bottom:6px; margin-top:18px; text-align:center; }
   </style>
 </head>
 <body>
@@ -20,11 +34,29 @@
   <div id="blobsRoot" aria-hidden="true"></div>
   <div class="content">
     <h1>Exploring the Unity Engine Interface</h1>
-    <div class="step-label">(Tutorial coming soon)</div>
+    <div class="step-label">(Follow along with the required setup below)</div>
     <div class="enlarge-tip">CLICK A PICTURE TO ENLARGE IT.</div>
+    <div class="follow-title">Follow Along</div>
+    <div style="display:flex;justify-content:center;align-items:center;margin-bottom:18px;gap:32px;">
+      <span class="tutorial-label label-green"><a href="tutorial1.html" style="color:#228B22;text-decoration:underline;font-weight:bold;">Required: Tutorial 1</a></span>
+    </div>
     <div class="tutorial-step">
       <h2>Step 1</h2>
-      <p>This tutorial is a placeholder. Content will be added soon.</p>
+      <p>This tutorial assumes you've followed <a href="tutorial1.html" style="color:#735AFF;text-decoration:underline;font-weight:bold;">tutorial 1</a>, have Unity 2022 and the VRChat Creator Companion installed, and have set up a blank VRChat world, all covered in tutorial 1. Let's open up our VRChat project via the VRChat Creator Companion. This may take some time to load assets and compile scripts based on your hardware specifications.</p>
+      <video id="tutorial2step1vid" src="TutorialClips/step1unitytutorialforvrcc.mp4" autoplay loop muted playsinline style="width:100%;max-width:560px;border-radius:12px;box-shadow:0 2px 16px rgba(141,255,199,0.13);margin-bottom:8px;cursor:zoom-in;background:#232323;"></video>
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 2</h2>
+      <p>When your project and scene fully loads in, you want to go to the window tab in the top &gt; layouts &gt; default layout. This ensures both you and i are looking at a more similar screen as each other throughout this process. Once you do that we can move on to the actual tutorial. The video is about 15 minutes, but youll want 45 minutes or so to really get to know your project layout!</p>
+      <video id="tutorial2step2vid" src="TutorialClips/step2unitytutorialforvrcc.mp4" autoplay loop muted playsinline style="width:100%;max-width:560px;border-radius:12px;box-shadow:0 2px 16px rgba(141,255,199,0.13);margin-bottom:8px;cursor:zoom-in;background:#232323;"></video>
+    </div>
+    <div class="tutorial-step">
+      <h2>Step 3</h2>
+      <p>Exploring the Unity Engine layout and our VRChat World project for quest/pc</p>
+      <div style="display:flex;justify-content:center;">
+        <iframe class="video-embed" id="yt-video-step3" src="https://www.youtube.com/embed/A-aKQxNxLEE?si=XwjM2Gp3TGMKzjhL" title="YouTube video player" frameborder="0" allowfullscreen style="width:100%;max-width:560px;aspect-ratio:16/9;border-radius:12px;box-shadow:0 2px 16px rgba(141,255,199,0.13);margin-bottom:8px;cursor:zoom-in;"></iframe>
+      </div>
+      <div class="enlarge-tip">CLICK THE VIDEO TO ENLARGE IT.</div>
     </div>
     <a class="back-link" href="tutorials.html">&#8592; Back to Tutorials</a>
   </div>
